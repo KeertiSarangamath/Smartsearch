@@ -1,0 +1,25 @@
+# Python environment & cache
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+
+# Environment file with private API keys
+.env
+
+# SQLite Database
+*.db
+*.sqlite3
+instance/
+
+# IDE / Editor configuration
+.vscode/
+.idea/
+*.swp
+
+# Export directory for temporary files
+exports/
+# Log files
+*.log

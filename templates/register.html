@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Register - SmartSearch AI{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center my-4">
+    <div class="col-md-6 col-lg-5">
+        <div class="card card-custom form-card p-4 p-md-5">
+            <div class="text-center mb-4">
+                <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle p-3 mb-3">
+                    <i class="bi bi-person-plus fs-2 text-primary" style="color: #1E3A8A;"></i>
+                </div>
+                <h3 class="fw-bold text-main">Create Account</h3>
+                <p class="text-muted-custom small">Register to generate automated research papers</p>
+            </div>
+
+            <!-- Registration Form -->
+            <form action="{{ url_for('register') }}" method="POST">
+                <div class="mb-3">
+                    <label for="username" class="form-label fw-semibold text-main">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-person text-muted"></i></span>
+                        <input type="text" class="form-control form-control-custom border-start-0" id="username" name="username" placeholder="Choose a username" required autocomplete="username">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label fw-semibold text-main">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-lock text-muted"></i></span>
+                        <input type="password" class="form-control form-control-custom border-start-0" id="password" name="password" placeholder="At least 5 characters" required autocomplete="new-password">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="confirm_password" class="form-label fw-semibold text-main">Confirm Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-check2-circle text-muted"></i></span>
+                        <input type="password" class="form-control form-control-custom border-start-0" id="confirm_password" name="confirm_password" placeholder="Re-enter your password" required autocomplete="new-password">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary-custom w-100 py-2.5">
+                    <i class="bi bi-person-plus me-1"></i> Register Account
+                </button>
+            </form>
+
+            <hr class="my-4 border-slate-200">
+
+            <!-- Link to Login -->
+            <div class="text-center">
+                <p class="mb-0 text-muted-custom small">Already have an account? 
+                    <a href="{{ url_for('login') }}" class="fw-bold text-decoration-none" style="color: #0D9488;">Log in here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Sources & Citations - {{ paper.topic }}{% endblock %}
+
+{% block content %}
+<!-- Header Navigation Card -->
+<div class="card card-custom p-4 mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="badge badge-custom-teal">
+                    <i class="bi bi-book me-1"></i>Academic Literature
+                </span>
+                <span class="badge badge-custom-blue">
+                    {{ sources|length }} Source Papers
+                </span>
+            </div>
+            <h3 class="fw-bold text-main mb-1 text-break">{{ paper.topic }}</h3>
+            <p class="text-muted-custom mb-0 small">
+                Academic paper references retrieved from Semantic Scholar API used as context during synthesis.
+            </p>
+        </div>
+        
+        <div>
+            <a href="{{ url_for('paper_view', paper_id=paper.id) }}" class="btn btn-outline-custom fw-semibold">
+                <i class="bi bi-arrow-left me-1"></i> Back to Paper
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- List of Sources -->
+<div class="row">
+    <div class="col-12">
+        {% if sources %}
+            {% for src in sources %}
+                <div class="card card-custom mb-3 p-4">
+                    <div class="d-flex align-items-start gap-3">
+                        <!-- Numbered Badge [1], [2], etc. -->
+                        <span class="badge badge-custom-teal fs-6 px-3 py-2 fw-bold">
+                            [{{ loop.index }}]
+                        </span>
+
+                        <div class="flex-grow-1">
+                            <!-- Paper Title -->
+                            <h5 class="fw-bold text-main mb-2" style="font-size: 1.1rem;">
+                                {{ src.title }}
+                            </h5>
+
+                            <!-- Authors & Year -->
+                            <div class="text-muted-custom small mb-3">
+                                <span class="me-4">
+                                    <i class="bi bi-people me-1"></i><strong>Authors:</strong> {{ src.authors }}
+                                </span>
+                                {% if src.publication_year %}
+                                    <span>
+                                        <i class="bi bi-calendar-event me-1"></i><strong>Year:</strong> {{ src.publication_year }}
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            <!-- Abstract Box -->
+                            <div class="bg-light p-3 rounded-2 mb-3 text-main small" style="line-height: 1.6; border: 1px solid #E2E8F0;">
+                                <strong class="text-main">Abstract:</strong><br>
+                                {{ src.abstract }}
+                            </div>
+
+                            <!-- External Semantic Scholar Link -->
+                            {% if src.url %}
+                                <a href="{{ src.url }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-custom btn-sm">
+                                    <i class="bi bi-box-arrow-up-right me-1"></i> View Source Paper on Semantic Scholar
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="card card-custom p-5 text-center my-4">
+                <i class="bi bi-exclamation-triangle display-5 text-muted-custom mb-3"></i>
+                <h5 class="fw-bold text-main">No cited sources found for this paper</h5>
+                <a href="{{ url_for('paper_view', paper_id=paper.id) }}" class="btn btn-primary-custom btn-sm mt-3">Return to Paper</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

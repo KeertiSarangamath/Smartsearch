@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - SmartSearch AI{% endblock %}
+
+{% block content %}
+<!-- Dashboard Header Banner -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center my-4 gap-3">
+    <div>
+        <h2 class="fw-bold text-main mb-1">Welcome back, {{ user.username }}! 👋</h2>
+        <p class="text-muted-custom mb-0">Manage your past research papers or start a new automated search.</p>
+    </div>
+    <div>
+        <a href="{{ url_for('generator') }}" class="btn btn-accent-custom shadow-sm px-4 py-2 d-inline-flex align-items-center">
+            <i class="bi bi-plus-lg me-2"></i> New Research
+        </a>
+    </div>
+</div>
+
+<!-- Section Subheading -->
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h5 class="fw-bold text-main mb-0">
+        <i class="bi bi-clock-history me-2" style="color: #0D9488;"></i>Research History
+    </h5>
+    <span class="badge badge-custom-teal fs-6">{{ papers|length }} Paper(s)</span>
+</div>
+
+<!-- Research Papers Grid -->
+{% if papers %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+        {% for paper in papers %}
+            <div class="col">
+                <div class="card card-custom h-100 p-3 position-relative">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div>
+                            <!-- Paper Status Badge -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge badge-custom-blue">
+                                    <i class="bi bi-journal-text me-1"></i>{{ paper.citation_style }}
+                                </span>
+
+                                {% if paper.status == 'completed' %}
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-2"><i class="bi bi-check-circle me-1"></i>Completed</span>
+                                {% elif paper.status == 'generating' %}
+                                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-2"><i class="bi bi-hourglass-split me-1"></i>Generating</span>
+                                {% else %}
+                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-2"><i class="bi bi-exclamation-circle me-1"></i>Failed</span>
+                                {% endif %}
+                            </div>
+
+                            <!-- Paper Topic Title -->
+                            <h5 class="card-title fw-bold text-main mb-2 text-break" style="font-size: 1.1rem; line-height: 1.4;">
+                                {{ paper.topic }}
+                            </h5>
+                        </div>
+
+                        <!-- Card Footer Metadata & Action Link -->
+                        <div class="mt-4 pt-3 border-top border-light-subtle">
+                            <div class="d-flex justify-content-between align-items-center text-muted-custom small mb-3">
+                                <span><i class="bi bi-calendar3 me-1"></i>{{ paper.created_at.strftime('%b %d, %Y') }}</span>
+                                <span><i class="bi bi-card-text me-1"></i>{{ paper.paper_length|capitalize }}</span>
+                            </div>
+
+                            <a href="{{ url_for('paper_view', paper_id=paper.id) }}" class="btn btn-outline-custom w-100 text-center fw-semibold">
+                                View & Edit Paper <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <!-- Empty State Container -->
+    <div class="card card-custom p-5 text-center my-4">
+        <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle p-4 mx-auto mb-3" style="width: 80px; height: 80px;">
+            <i class="bi bi-journal-plus fs-1" style="color: #0D9488;"></i>
+        </div>
+        <h4 class="fw-bold text-main mb-2">No research papers generated yet</h4>
+        <p class="text-muted-custom max-w-md mx-auto mb-4" style="max-width: 480px;">
+            Enter your research topic and SmartSearch AI will gather academic literature and write a structured paper for you.
+        </p>
+        <div>
+            <a href="{{ url_for('generator') }}" class="btn btn-accent-custom px-4 py-2">
+                <i class="bi bi-plus-circle me-1"></i> Start First Research
+            </a>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

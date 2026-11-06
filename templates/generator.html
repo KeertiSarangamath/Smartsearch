@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Start New Research - SmartSearch AI{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center my-4">
+    <div class="col-lg-8 col-xl-7">
+        <div class="card card-custom p-4 p-md-5">
+            <!-- Header Title -->
+            <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                <div class="bg-light rounded-circle p-3 me-3">
+                    <i class="bi bi-lightbulb fs-3" style="color: #0D9488;"></i>
+                </div>
+                <div>
+                    <h3 class="fw-bold text-main mb-1">Start New Research Project</h3>
+                    <p class="text-muted-custom mb-0 small">Configure your research topic and parameters for AI synthesis</p>
+                </div>
+            </div>
+            
+            <!-- Generator Form -->
+            <form action="{{ url_for('generator') }}" method="POST">
+                
+                <!-- Topic Input -->
+                <div class="mb-4">
+                    <label for="topic" class="form-label fw-semibold text-main">Research Topic <span class="text-danger">*</span></label>
+                    <input type="text" 
+                           class="form-control form-control-custom form-control-lg fs-6" 
+                           id="topic" 
+                           name="topic" 
+                           placeholder="e.g., Applications of Quantum Computing in Healthcare" 
+                           required>
+                    <div class="form-text text-muted-custom small">Provide a specific research domain, academic query, or thesis subject.</div>
+                </div>
+
+                <div class="row">
+                    <!-- Paper Length Choice -->
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label fw-semibold text-main">Paper Length Target</label>
+                        <div class="bg-light p-3 rounded-2 border">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="paper_length" id="lengthShort" value="short">
+                                <label class="form-check-label text-main" for="lengthShort">
+                                    <strong>Short</strong> (~800 words)
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="paper_length" id="lengthMedium" value="medium" checked>
+                                <label class="form-check-label text-main" for="lengthMedium">
+                                    <strong>Medium</strong> (~1500 words)
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paper_length" id="lengthLong" value="long">
+                                <label class="form-check-label text-main" for="lengthLong">
+                                    <strong>Long</strong> (~2500 words)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Source Count Dropdown -->
+                    <div class="col-md-6 mb-4">
+                        <label for="source_count" class="form-label fw-semibold text-main">Number of Sources</label>
+                        <select class="form-select form-control-custom" id="source_count" name="source_count">
+                            <option value="5" selected>5 Sources (Standard Search)</option>
+                            <option value="10">10 Sources (Extended Review)</option>
+                            <option value="15">15 Sources (Comprehensive Study)</option>
+                        </select>
+                        <div class="form-text text-muted-custom small mt-2">Academic paper references fetched from Semantic Scholar.</div>
+                    </div>
+                </div>
+
+                <!-- Citation Style Choice -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold text-main">Citation Style</label>
+                    <div class="d-flex gap-4 bg-light p-3 rounded-2 border">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="citation_style" id="styleIEEE" value="IEEE" checked>
+                            <label class="form-check-label text-main" for="styleIEEE">
+                                <strong>IEEE</strong> (Numbered: [1], [2])
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="citation_style" id="styleAPA" value="APA">
+                            <label class="form-check-label text-main" for="styleAPA">
+                                <strong>APA</strong> (Author-Date: Author, Year)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <!-- Submit Button -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-accent-custom py-3 fs-6 d-inline-flex align-items-center justify-content-center">
+                        <i class="bi bi-cpu fs-5 me-2"></i> Generate Research Paper
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+Flask
+Flask-SQLAlchemy
+google-genai
+google-generativeai
+requests
+reportlab
+python-docx
+python-dotenv
