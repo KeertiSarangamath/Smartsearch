@@ -1,4 +1,6 @@
 import logging
+import os
+import re
 import requests
 
 
@@ -42,16 +44,28 @@ def search_papers(topic, source_count=5):
         "mailto": "student@example.com"
     }
 
+    # Add OpenAlex API key to query parameters if present in environment
+    api_key = os.getenv("OPENALEX_API_KEY")
+    if api_key:
+        params["api_key"] = api_key
+
     papers = []
 
     try:
         # Send HTTP GET request with a 10-second timeout
         response = requests.get(url, params=params, timeout=10)
 
-        # Debug logs immediately after API request
-        logging.debug(f"[OPENALEX DEBUG] Request URL: {response.url}")
+        # Debug logs immediately after API request (ensure API key is never printed or logged)
+        sanitized_url = re.sub(r'([?&]api_key=)[^&]+', r'\1[REDACTED]', response.url)
+        if api_key:
+            sanitized_url = sanitized_url.replace(api_key, "[REDACTED]")
+        logging.debug(f"[OPENALEX DEBUG] Request URL: {sanitized_url}")
         logging.debug(f"[OPENALEX DEBUG] Status Code: {response.status_code}")
-        logging.debug(f"[OPENALEX DEBUG] Response Text (first 500 chars): {response.text[:500]}")
+
+        sanitized_text = response.text[:500]
+        if api_key:
+            sanitized_text = sanitized_text.replace(api_key, "[REDACTED]")
+        logging.debug(f"[OPENALEX DEBUG] Response Text (first 500 chars): {sanitized_text}")
 
         # HTTP Status 200 means successful API response
         if response.status_code == 200:
@@ -100,11 +114,19 @@ def search_papers(topic, source_count=5):
 
             logging.debug(f"[OPENALEX] Retrieved {len(papers)} paper(s) for topic: '{topic}'")
         else:
-            logging.error(f"[OPENALEX ERROR] HTTP {response.status_code}: {response.text}")
+            err_text = response.text
+            if api_key:
+                err_text = err_text.replace(api_key, "[REDACTED]")
+            err_text = re.sub(r'([?&]api_key=)[^&]+', r'\1[REDACTED]', err_text)
+            logging.error(f"[OPENALEX ERROR] HTTP {response.status_code}: {err_text}")
 
     except Exception as e:
         # Gracefully handle network errors, timeouts, or JSON decoding failures
-        logging.error(f"[OPENALEX EXCEPTION] Failed to search papers: {str(e)}", exc_info=True)
+        err_msg = str(e)
+        if api_key:
+            err_msg = err_msg.replace(api_key, "[REDACTED]")
+        err_msg = re.sub(r'([?&]api_key=)[^&]+', r'\1[REDACTED]', err_msg)
+        logging.error(f"[OPENALEX EXCEPTION] Failed to search papers: {err_msg}")
 
     return papers
 
